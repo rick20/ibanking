@@ -1,0 +1,20 @@
+{
+    "name": "rick20/ibanking",
+    "description": "An automatic way to check the balance and received payment in your bank account.",
+    "authors": [
+        {
+            "name": "Ricky",
+            "email": "lie.ricky@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle": "~5.0|~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rick20\\IBanking\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
