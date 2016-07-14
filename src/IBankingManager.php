@@ -11,7 +11,7 @@ class IBankingManager extends Manager
         $config = $this->app['config']['services.bca'];
 
         return $this->buildProvider(
-            'Rick20\IBanking\Providers\BcaProvider', $config
+            '\Rick20\IBanking\Providers\BCAProvider', $config
         );
     }
 
@@ -20,13 +20,23 @@ class IBankingManager extends Manager
         $config = $this->app['config']['services.mandiri'];
 
         return $this->buildProvider(
-            'Rick20\IBanking\Providers\MandiriProvider', $config
+            '\Rick20\IBanking\Providers\MandiriProvider', $config
         );
     }
 
+    /**
+     * Build an IBanking provider instance.
+     *
+     * @param  string  $provider
+     * @param  array  $config
+     * @return \Rick20\IBanking\Providers\AbstractProvider
+     */
     public function buildProvider($provider, $config)
     {
-        return new $provider($config['username'], $config['password']);
+        return new $provider(
+            app('Rick20\IBanking\Contracts\Parser'),
+            $config['username'], $config['password']
+        );
     }
 
     /**

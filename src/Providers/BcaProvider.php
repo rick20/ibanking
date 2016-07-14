@@ -2,63 +2,25 @@
 
 namespace Rick20\IBanking\Providers;
 
+use Carbon\Carbon;
+use Rick20\IBanking\Contracts\Parser;
 use Symfony\Component\DomCrawler\Crawler;
 
-class BcaProvider extends AbstractProvider
+class BCAProvider extends AbstractProvider
 {
-    public function login()
-    {
-        $this->getHttpClient()->get('https://m.klikbca.com/login.jsp');
+    protected $alwaysPOST = true;
 
-        $this->getHttpClient()->post('https://m.klikbca.com/authentication.do', [
-            'headers' => [
-                'Referer' => 'https://m.klikbca.com/login.jsp'
-            ],
-            'form_params' => $this->getLoginData()
-        ]);
+    protected function getLoginPageUrl()
+    {
+        return 'https://m.klikbca.com/login.jsp';
     }
 
-    public function logout()
+    protected function getAuthUrl()
     {
-        $this->getHttpClient()->get('https://m.klikbca.com/authentication.do?value(actions)=logout', [
-            'headers' => [
-                'Referer' => 'https://m.klikbca.com/authentication.do?value(actions)=menu'
-            ]
-        ]);
+        return 'https://m.klikbca.com/authentication.do';
     }
 
-    public function read()
-    {
-        $this->login();
-
-        $this->getHttpClient()->get('https://m.klikbca.com/accountstmt.do?value(actions)=menu', [
-            'headers' => [
-                'Referer' => 'https://m.klikbca.com/authentication.do'
-            ]
-        ]);
-
-        $response = $this->getHttpClient()->get('https://m.klikbca.com/balanceinquiry.do', [
-            'headers' => [
-                'Referer' => 'https://m.klikbca.com/accountstmt.do?value(actions)=menu'
-            ]
-        ]);
-
-        $this->logout();
-
-        $crawler = new Crawler($response->getBody()->getContents());
-
-        return $crawler
-            ->filter('#pagebody > span > table')
-            ->last()
-            ->filter('table > tbody > tr')
-            ->last()
-            ->filter('td')
-            ->last()
-            ->filter('b')
-            ->text();
-    }
-
-    private function getLoginData()
+    protected function getAuthFormData()
     {
         $ip = $this->getIPAddress();
 
@@ -71,6 +33,62 @@ class BcaProvider extends AbstractProvider
             'user_ip' => $ip,
             'value(mobile)' => 'true',
             'mobile' => 'true',
+        ];
+    }
+
+    protected function getLogoutUrl()
+    {
+        return 'https://m.klikbca.com/authentication.do?value(actions)=logout';
+    }
+
+    protected function getBalancePageUrl()
+    {
+        return 'https://m.klikbca.com/balanceinquiry.do';
+    }
+
+    protected function getXPathToBalance()
+    {
+        return "//*[@id='pagebody']/span/table[2]/tr/td[2]/table/tr[2]/td[3]";
+    }
+
+    protected function getStatementFormUrl()
+    {
+        return 'https://m.klikbca.com/accountstmt.do?value(actions)=acctstmtview';
+    }
+
+    protected function getStatementFormData($daysBackward)
+    {
+        $end = Carbon::now();
+        $start = Carbon::now()->subDays($daysBackward);
+
+        return [
+            'r1' => 1,
+            'value(D1)' => 0,
+            'value(startDt)' => $start->format('d'),
+            'value(startMt)' => $start->format('m'),
+            'value(startYr)' => $start->format('Y'),
+            'value(endDt)' => $end->format('d'),
+            'value(endMt)' => $end->format('m'),
+            'value(endYr)' => $end->format('Y')
+        ];
+    }
+
+    protected function getXPathToStatement()
+    {
+        return "//*[@id='pagebody']/span/table[2]/tr[2]/td[2]/table/tr";
+    }
+
+    protected function buildStatementItem(Parser $row, $i)
+    {
+        if ($i == 0) return false;
+
+        $arrDescs = explode('<br>', $row->parse("//td[2]")->html());
+
+        return [
+            'date' => $row->parse("//td[1]")->text(),
+            'desc' => str_replace("<br>", " | ", $row->parse("//td[2]")->html()),
+            'type' => $row->parse("//td[3]")->text(),
+            'amount' => $this->normalizeAmount(last($arrDescs))
         ];
     }
 
