@@ -1,7 +1,7 @@
 # IBanking Package for Laravel 5
 
 This package allows you to crawl and parse your bank balance and statement. Currently only available for Bank BCA and Bank Mandiri.
-Inspired by the original [BCA Parser](www.randomlog.org/article/bca-parser-lagi/)
+Inspired by the original [BCA Parser](http://www.randomlog.org/article/bca-parser-lagi/)
 
 ## Installation
 
