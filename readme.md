@@ -6,6 +6,7 @@ Inspired by the original [BCA Parser](www.randomlog.org/article/bca-parser-lagi/
 ## Installation
 
 To get started with IBanking, run this command or add the package to your `composer.json`
+
     composer require rick20/ibanking
 
 ## Configuration
