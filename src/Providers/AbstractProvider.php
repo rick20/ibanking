@@ -129,7 +129,11 @@ abstract class AbstractProvider
 
         return array_filter($parsedStatement->each(
             function (Parser $row, $i) {
-                return $this->buildStatementItem($row, $i);
+                try {
+                    return $this->buildStatementItem($row, $i);
+                } catch (\InvalidArgumentException $err) {
+                    return false;
+                }
             }
         ));
     }
