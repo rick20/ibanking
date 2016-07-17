@@ -45,7 +45,7 @@ $ibank->logout();
 ```
 
 The `logout()` method should be called to avoid single session at a time restriction from the internet banking provider.
-This means if you don't call the `logout()` method at the end of your codes, you won't be able to login to your internet banking from anywhere.
+This means if you don't call the `logout()` method at the end of your codes, you won't be able to login to your internet banking from anywhere until its session expired.
 
 ## Tips & Advice
 
