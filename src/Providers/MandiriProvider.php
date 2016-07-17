@@ -15,7 +15,7 @@ class MandiriProvider extends AbstractProvider
         return 'https://ib.bankmandiri.co.id/retail/Login.do?action=form&lang=in_ID';
     }
 
-    protected function getAuthUrl()
+    protected function getAuthFormUrl()
     {
         return 'https://ib.bankmandiri.co.id/retail/Login.do';
     }
@@ -45,7 +45,7 @@ class MandiriProvider extends AbstractProvider
         return 'https://ib.bankmandiri.co.id/retail/AccountDetail.do?action=result&ACCOUNTID=' . $this->accountid;
     }
 
-    protected function getXPathToBalance()
+    protected function getBalanceXPath()
     {
         return '//form/table/tr[4]/td[2]/div/table[2]/tr[5]';
     }
@@ -79,7 +79,7 @@ class MandiriProvider extends AbstractProvider
         ];
     }
 
-    protected function getXPathToStatement()
+    protected function getStatementXPath()
     {
         return "//form/table/tr[4]/td[2]/div/table[3]/tr";
     }

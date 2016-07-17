@@ -33,7 +33,7 @@ Finally add these lines to your `config/services.php` file:
 
 After all sets, use the IBanking as follows:
 ```php
-$ibank = IBanking::driver('bca');
+$ibank = IBanking::bank('bca');
 
 $ibank->login();
 
@@ -56,4 +56,4 @@ Changing your password regularly can help to keep it more secure.
 
 ## Bugs & Improvements
 
-Feel free to report me any bug you found. I would be also very happy to receive pull requests for improvements and also for other internet banking provider.
+Feel free to report me any bug you found. I would be also very happy to receive pull requests for improvements and also for other  internet banking provider.

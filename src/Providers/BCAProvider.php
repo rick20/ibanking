@@ -15,7 +15,7 @@ class BCAProvider extends AbstractProvider
         return 'https://m.klikbca.com/login.jsp';
     }
 
-    protected function getAuthUrl()
+    protected function getAuthFormUrl()
     {
         return 'https://m.klikbca.com/authentication.do';
     }
@@ -46,7 +46,7 @@ class BCAProvider extends AbstractProvider
         return 'https://m.klikbca.com/balanceinquiry.do';
     }
 
-    protected function getXPathToBalance()
+    protected function getBalanceXPath()
     {
         return "//*[@id='pagebody']/span/table[2]/tr/td[2]/table/tr[2]/td[3]";
     }
@@ -73,7 +73,7 @@ class BCAProvider extends AbstractProvider
         ];
     }
 
-    protected function getXPathToStatement()
+    protected function getStatementXPath()
     {
         return "//*[@id='pagebody']/span/table[2]/tr[2]/td[2]/table/tr";
     }

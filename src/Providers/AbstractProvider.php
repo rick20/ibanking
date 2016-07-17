@@ -65,7 +65,7 @@ abstract class AbstractProvider
 
     abstract protected function getLoginPageUrl();
 
-    abstract protected function getAuthUrl();
+    abstract protected function getAuthFormUrl();
 
     abstract protected function getAuthFormData();
 
@@ -73,13 +73,13 @@ abstract class AbstractProvider
 
     abstract protected function getBalancePageUrl();
 
-    abstract protected function getXPathToBalance();
+    abstract protected function getBalanceXPath();
 
     abstract protected function getStatementFormUrl();
 
     abstract protected function getStatementFormData($daysBackward);
 
-    abstract protected function getXPathToStatement();
+    abstract protected function getStatementXPath();
 
     abstract protected function buildStatementItem(Parser $row, $i);
 
@@ -93,7 +93,7 @@ abstract class AbstractProvider
     {
         $this->initCookies();
 
-        $this->submit($this->getAuthUrl(), $this->getAuthFormData());
+        $this->submit($this->getAuthFormUrl(), $this->getAuthFormData());
     }
 
     public function logout()
@@ -105,7 +105,7 @@ abstract class AbstractProvider
     {
         $parsedBalance = $this
             ->visit($this->getBalancePageUrl())
-            ->parse($this->getXPathToBalance());
+            ->parse($this->getBalanceXPath());
 
         if (! $parsedBalance->found()) {
             return false;
@@ -121,7 +121,7 @@ abstract class AbstractProvider
                 $this->getStatementFormUrl(),
                 $this->getStatementFormData($daysBackward)
             )
-            ->parse($this->getXPathToStatement());
+            ->parse($this->getStatementXPath());
 
         if (! $parsedStatement->found()) {
             return false;
