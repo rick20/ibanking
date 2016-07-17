@@ -1,7 +1,7 @@
 # IBanking Package for Laravel 5
 
-This package allows you to crawl and parse your bank balance and statement. Currently only available for Bank BCA and Bank Mandiri.
-Inspired by the original [BCA Parser](http://www.randomlog.org/article/bca-parser-lagi/)
+This package allows you to crawl and parse your bank balance and statement. Currently available for Bank BCA and Bank Mandiri.
+Inspired by the original [BCA Parser](http://www.randomlog.org/article/bca-parser-lagi/). Thank you yah gan =)
 
 ## Installation
 
@@ -34,13 +34,26 @@ Finally add these lines to your `config/services.php` file:
 After all sets, use the IBanking as follows:
 ```php
 $ibank = IBanking::driver('bca');
-$ibank->login(); // Must be called before anything else
+
+$ibank->login();
+
 $balance = $ibank->getBalance();
+
 $statement = $ibank->getStatement();
-$ibank->logout(); // Must be called after you are done.
+
+$ibank->logout();
 ```
-Please be noted that if you forgot to call the `logout()` method, you will not be able to login to your account for a certain minutes.
 
-## Attention!
+The `logout()` method should be called to avoid single session at a time restriction from the internet banking provider.
+This means if you don't call the `logout()` method at the end of your codes, you won't be able to login to your internet banking from anywhere.
 
-While this package might useful for you to do automatic check on your balance statement, I don't responsible for any fraud that might come later. So please make any necessary effort to keep it safe. Changing your password regularly might help to keep it more secure.
+## Tips & Advice
+
+You can place these lines of code under the Scheduled Command job and sets it to run [not more than 100x per day](http://www.randomlog.org/article/bca-parser-lagi/#comment-2912).
+The less you run it per day, the less chances you got blocked/banned by the internet banking provider.
+Please make any necessary effort to keep your ibank username and password safe and secure.
+Changing your password regularly can help to keep it more secure.
+
+## Bugs & Improvements
+
+Feel free to report me any bug you found. I would be also very happy to receive pull requests for improvements and also for other internet banking provider.
