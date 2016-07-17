@@ -81,7 +81,7 @@ abstract class AbstractProvider
 
     abstract protected function getStatementXPath();
 
-    abstract protected function buildStatementItem(Parser $row, $i);
+    abstract protected function buildStatementItem(Parser $row);
 
 
     protected function initCookies()
@@ -129,8 +129,9 @@ abstract class AbstractProvider
 
         return array_filter($parsedStatement->each(
             function (Parser $row, $i) {
+                if ($i == 0) return false; // table header
                 try {
-                    return $this->buildStatementItem($row, $i);
+                    return $this->buildStatementItem($row);
                 } catch (\InvalidArgumentException $err) {
                     return false;
                 }

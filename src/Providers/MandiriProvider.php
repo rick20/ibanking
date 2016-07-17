@@ -84,10 +84,8 @@ class MandiriProvider extends AbstractProvider
         return "//form/table/tr[4]/td[2]/div/table[3]/tr";
     }
 
-    protected function buildStatementItem(Parser $row, $i)
+    protected function buildStatementItem(Parser $row)
     {
-        if ($i == 0) return false;
-
         $dbamount = trim($row->parse("//td[3]")->text());
         $cramount = trim($row->parse("//td[4]")->text());
 

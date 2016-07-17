@@ -78,17 +78,15 @@ class BCAProvider extends AbstractProvider
         return "//*[@id='pagebody']/span/table[2]/tr[2]/td[2]/table/tr";
     }
 
-    protected function buildStatementItem(Parser $row, $i)
+    protected function buildStatementItem(Parser $row)
     {
-        if ($i == 0) return false;
-
         $arrDescs = explode('<br>', $row->parse("//td[2]")->html());
 
         return [
             'date' => $row->parse("//td[1]")->text(),
-            'desc' => str_replace("<br>", " | ", $row->parse("//td[2]")->html()),
+            'desc' => implode(" | ", $arrDescs),
             'type' => $row->parse("//td[3]")->text(),
-            'amount' => $this->normalizeAmount(last($arrDescs))
+            'amount' => $this->normalizeAmount(end($arrDescs))
         ];
     }
 
